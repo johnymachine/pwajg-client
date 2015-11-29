@@ -1,7 +1,7 @@
 var discussionBoardApp = angular.module('discussionBoardApp', ['ngRoute', 'discussionBoardControllers', 'discussionBoardServices']);
 
 discussionBoardApp.config(function($httpProvider) {
-    $httpProvider.defaults.headers.common['Token'] = '089036ca24923721ef5d339e59504370006691dc11de19d6219b46579e68bc8879f8041f4bb1474907586424540b3e101a678846c5405efa313dcce21ba15347';
+    $httpProvider.defaults.headers.common['Token'] = '1b51ec5674cf270ce139236516a09ea2922ab6caac3cc80a84f43006655b5f9b7b7431be33df770a27c78f9cb452bb6b2da84af2edae766f2cdb20cc87c10ea9';
 });
 
 discussionBoardApp.config(function($routeProvider) {
@@ -43,10 +43,12 @@ discussionBoardControllers.controller('mainController', function($scope, $locati
         var thread = new Thread();
         thread.title = $scope.title;
         thread.body = $scope.body;
-        thread.$save();
-        $scope.title = '';
-        $scope.body = '';
-        $scope.threads = Thread.query();
+        thread.$save(
+            function success(data, headers) {
+                $scope.title = '';
+                $scope.body = '';
+                $location.path("/thread/" + data._id);
+            });
     };
 
     $scope.goToPage = function(page) {
@@ -82,8 +84,9 @@ discussionBoardControllers.controller('threadController', function($scope, $rout
     };
 
     $scope.deletePost = function(post) {
-        post.$delete();
-        $scope.refreshPosts();
+        post.$delete(function success(data, headers) {
+            $scope.refreshPosts();
+        });
     };
 
     $scope.newPost = function() {
@@ -91,14 +94,16 @@ discussionBoardControllers.controller('threadController', function($scope, $rout
         post.body = $scope.body;
         post.$save({
             thread_id: $routeParams.thread_id
+        }, function success(data, headers) {
+            $scope.body = '';
+            $scope.refreshPosts();
         });
-        $scope.body = '';
-        $scope.refreshPosts();
     };
 
     $scope.deleteThread = function(thread) {
-        thread.$delete();
-        $location.path('/');
+        thread.$delete(function success(data, headers) {
+            $location.path('/');
+        });
     };
 
     $scope.refreshPosts();
