@@ -1,7 +1,8 @@
 var discussionBoardServices = angular.module('discussionBoardServices', ['ngResource']);
 
+//http://pwajg-server.herokuapp.com/apiv1
 discussionBoardServices.factory('Thread', function($resource) {
-    return $resource('http://localhost:8080/apiv1/threads/:id/', {
+    return $resource('http://pwajg-server.herokuapp.com/apiv1/threads/:id/', {
         id: '@_id'
     }, {
         query: {
@@ -15,11 +16,11 @@ discussionBoardServices.factory('Thread', function($resource) {
 });
 
 discussionBoardServices.factory('Post', function($resource) {
-    return $resource('http://localhost:8080/apiv1/posts/:id/', {
+    return $resource('http://pwajg-server.herokuapp.com/apiv1/posts/:id/', {
         id: '@_id'
     }, {
         query: {
-            url: 'http://localhost:8080/apiv1/threads/:thread_id/posts',
+            url: 'http://pwajg-server.herokuapp.com/apiv1/threads/:thread_id/posts',
             method: 'GET',
             isArray: true,
             param: {
@@ -29,7 +30,7 @@ discussionBoardServices.factory('Post', function($resource) {
             }
         },
         save: {
-            url: 'http://localhost:8080/apiv1/threads/:thread_id/posts',
+            url: 'http://pwajg-server.herokuapp.com/apiv1/threads/:thread_id/posts',
             method: 'POST',
             param: {
                 thread_id: '@_thread'
@@ -39,5 +40,5 @@ discussionBoardServices.factory('Post', function($resource) {
 });
 
 discussionBoardServices.factory('Auth', function($resource) {
-    return $resource('http://localhost:8080/apiv1/auth/');
+    return $resource('http://pwajg-server.herokuapp.com/apiv1/auth/');
 });

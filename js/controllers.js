@@ -65,6 +65,7 @@ discussionBoardControllers.controller('threadController', function($scope, $rout
 
     $scope.deletePost = function(post) {
         post.$delete();
+        $scope.refreshPosts();
     };
 
     $scope.newPost = function() {
@@ -77,7 +78,7 @@ discussionBoardControllers.controller('threadController', function($scope, $rout
         $scope.refreshPosts();
     };
 
-    $scope.deletePost = function(thread) {
+    $scope.deleteThread = function(thread) {
         thread.$delete();
         $location.path('/');
     };
