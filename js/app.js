@@ -87,7 +87,7 @@ discussionBoardControllers.controller('threadController', function($scope, $rout
 
     $scope.newPost = function() {
         var post = new Post();
-        post.text = $scope.body;
+        post.body = $scope.body;
         post.$save({
             thread_id: $routeParams.thread_id
         });
