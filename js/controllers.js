@@ -25,10 +25,12 @@ discussionBoardControllers.controller('mainController', function($scope, $locati
         var thread = new Thread();
         thread.title = $scope.title;
         thread.body = $scope.body;
-        thread.$save();
-        $scope.title = '';
-        $scope.body = '';
-        $scope.threads = Thread.query();
+        thread.$save(
+            function success(data, headers) {
+                $scope.title = '';
+                $scope.body = '';
+                $location.path("/thread/" + data._id);
+            });
     };
 
     $scope.goToPage = function(page) {
@@ -64,8 +66,9 @@ discussionBoardControllers.controller('threadController', function($scope, $rout
     };
 
     $scope.deletePost = function(post) {
-        post.$delete();
-        $scope.refreshPosts();
+        post.$delete(function success(data, headers) {
+            $scope.refreshPosts();
+        });
     };
 
     $scope.newPost = function() {
@@ -73,14 +76,16 @@ discussionBoardControllers.controller('threadController', function($scope, $rout
         post.body = $scope.body;
         post.$save({
             thread_id: $routeParams.thread_id
+        }, function success(data, headers) {
+            $scope.body = '';
+            $scope.refreshPosts();
         });
-        $scope.body = '';
-        $scope.refreshPosts();
     };
 
     $scope.deleteThread = function(thread) {
-        thread.$delete();
-        $location.path('/');
+        thread.$delete(function success(data, headers) {
+            $location.path('/');
+        });
     };
 
     $scope.refreshPosts();
