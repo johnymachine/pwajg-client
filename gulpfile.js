@@ -5,6 +5,9 @@ var rimraf = require('gulp-rimraf');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 
+//deploy
+var ghPages = require('gulp-gh-pages');
+
 //js
 var uglify = require('gulp-uglify');
 
@@ -34,14 +37,7 @@ var destination = {
     img: dist + 'img'
 };
 
-gulp.task('copy:fontawesome', function() {
-    return gulp.src('/home/dev/Repos/pwajg-client/node_modules/font-awesome/fonts/**/*')
-        .pipe(gulp.dest(destination.fonts));
-});
-
 gulp.task('copy:bootstrap', function() {
-    gulp.src('/home/dev/Repos/pwajg-client/node_modules/bootstrap/dist/js/bootstrap.min.js')
-        .pipe(gulp.dest(destination.js));
     return gulp.src('/home/dev/Repos/pwajg-client/node_modules/bootstrap/fonts/**/*')
         .pipe(gulp.dest(destination.fonts));
 });
@@ -55,7 +51,7 @@ gulp.task('copy:angular', function() {
         .pipe(gulp.dest(destination.js));
 });
 
-gulp.task('copy:all', ['copy:bootstrap', 'copy:fontawesome', 'copy:angular']);
+gulp.task('copy:all', ['copy:bootstrap', 'copy:angular']);
 
 gulp.task('build:less', function() {
     return gulp.src(source.less)
@@ -79,7 +75,9 @@ gulp.task('build:js', function() {
         .pipe(concat('app.js'))
         .pipe(gulp.dest(destination.js))
         .pipe(rename('app.min.js'))
-        .pipe(uglify())
+        .pipe(uglify({
+            mangle: false
+        }))
         .pipe(gulp.dest(destination.js));
 });
 
@@ -105,6 +103,11 @@ gulp.task('clean:all', function() {
         .pipe(rimraf({
             force: true
         }));
+});
+
+gulp.task('deploy', function() {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages());
 });
 
 gulp.task('default', ['copy:all', 'build:all']);

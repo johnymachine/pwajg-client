@@ -1,0 +1,25 @@
+<h1>Discussion</h1>
+<div class="list-group">
+    <button type="button" ng-click="visitThread(thread)" class="list-group-item" ng-repeat="thread in threads">
+        <strong class="text-bold">{{thread.text}}</strong>
+        <em class="pull-right">{{thread.updated_at | date: "dd. MM. yy @ HH:mm:ss"}} by {{thread._owner.username}}</em>
+    </button>
+</div>
+<nav class="text-center" ng-if="pages.length>1">
+    <ul class="pagination">
+        <li ng-repeat="p in pages" ng-class="{active: p == page}"><a ng-click="goToPage(p)">{{p}}</a></li>
+    </ul>
+</nav>
+<h1>Create new discussion</h1>
+<form ng-submit="newThread()">
+    <div class="form-group">
+        <label for="inputTitle">Title</label>
+        <input type="text" class="form-control" id="inputTitle" placeholder="Title of your thread" ng-model="title">
+    </div>
+    <div class="form-group">
+        <label for="inputBody">Body</label>
+        <textarea class="form-control" id="inputBody" rows="3" ng-model="body">Text body</textarea>
+    </div>
+    <button type="submit" class="btn btn-success btn-lg pull-right">Post</button>
+    <div class="clearfix"></div>
+</form>

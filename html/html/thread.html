@@ -1,0 +1,30 @@
+<div class="jumbotron text-center">
+    <p>{{thread.text}}</p>
+    <span>{{thread.updated_at | date: "dd. MM. yy @ HH:mm:ss"}} by {{thread._owner.username}}</span>
+    <hr>
+    <button type="button" class="btn btn-danger" ng-click="deleteThread(thread)">Delete</button>
+</div>
+<h1>Posts</h1>
+<div class="panel panel-default" ng-repeat="post in posts">
+    <div class="panel-body">
+        <button ng-if="!post.is_main" type="button" class="close" ng-click="deletePost(post)"><span>&times;</span></button>
+        {{post.text}}
+    </div>
+    <div class="panel-footer text-right">
+        {{post.updated_at | date: "dd. MM. yy @ HH:mm:ss"}} by {{post._owner.username}}
+    </div>
+</div>
+<nav class="text-center" ng-if="pages.length>1">
+    <ul class="pagination">
+        <li ng-repeat="p in pages" ng-class="{active: p == page}"><a ng-click="goToPage(p)">{{p}}</a></li>
+    </ul>
+</nav>
+<h1>Post to discussion</h1>
+<form ng-submit="newPost()">
+    <div class="form-group">
+        <label for="inputBody">Body</label>
+        <textarea class="form-control" id="inputBody" rows="3" ng-model="body">Text body</textarea>
+    </div>
+    <button type="submit" class="btn btn-success btn-lg pull-right">Post</button>
+    <div class="clearfix"></div>
+</form>
